@@ -27,6 +27,8 @@ app.on('ready', function() {
     'title-bar-style': 'hidden'
   });
 
+  mainWindow.maximize();
+
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/index.html');
 
