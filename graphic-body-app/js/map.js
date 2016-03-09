@@ -3,6 +3,12 @@
  */
 
 
+
+
+
+/**
+ *  The main function to create the map image on the canvas
+ **/
 (function buildMap(){
 
 
@@ -12,9 +18,7 @@
     var map = new Raphael(mapContainer, 500, 700);
     map.setViewBox(0, 0, 900, 1900 );
 
-
-
-
+    var theRegions = []; //array to hold all regions
 
     var style = {
         fill: "#D3AF8E",
@@ -111,20 +115,7 @@
     regions["80"] = map.path("M545,1363.666c15.334,20,66.403,21.904,89.334-6C626,1402.5,597.5,1467,556.776,1456.352  c-1.081-14.107-1.356-27.736-0.442-40.02C556.334,1416.332,560.334,1383.666,545,1363.666z");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //add event listeners and atributes to the svg regions
     for(var regionName in regions) {
         regions[regionName].attr(style);
         (function (region) {
@@ -135,9 +126,10 @@
             region[0].addEventListener("mouseover", function() {
                 region.animate(hoverStyle, animationSpeed);
 
-                var theRegions = {};
-                theRegions['name'] = regionName;
-                console.log(theRegions);
+
+                theRegions.push( region['id'] );
+
+                console.log(region);
 
             }, true);
 
@@ -151,3 +143,5 @@
 
 
 })();
+
+

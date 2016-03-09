@@ -1,27 +1,25 @@
 {
-  "name": "electron-quick-start",
+  "name": "graphic-body",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Digital pain body diagrom software",
   "main": "app.js",
   "scripts": {
     "start": "electron app.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/atom/electron-quick-start.git"
+    "url": "https://github.com/ahayn465/graphic-body-app"
   },
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial"
+    "Graphic",
+    "Body"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Amanda Haynes",
+  "license": "",
   "bugs": {
-    "url": "https://github.com/atom/electron-quick-start/issues"
+    "url": "dev@portad.ca"
   },
-  "homepage": "https://github.com/atom/electron-quick-start#readme",
+  "homepage": "https://github.com/ahayn465/graphic-body-app",
   "devDependencies": {
     "electron-prebuilt": "^0.36.0",
     "jquery": "^2.2.1"
