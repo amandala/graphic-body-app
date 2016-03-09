@@ -145,3 +145,32 @@
 })();
 
 
+/**
+* Checks to see if there is localStorage available in the browser
+* */
+
+(function checkStorage(){
+    if (storageAvailable('localStorage')) {
+        // Yippee! We can use localStorage awesomeness
+        console.log('localStorage available for use');
+    }
+    else {
+        // Too bad, no localStorage for us
+        console.log('No');
+    }
+})();
+
+
+/**  helper function for local storage availability inquiry **/
+function storageAvailable(type) {
+    try {
+        var storage = window[type],
+            x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return false;
+    }
+}
