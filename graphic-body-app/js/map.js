@@ -3,9 +3,6 @@
  */
 
 
-
-
-
 /**
  *  The main function to create the map image on the canvas
  **/
@@ -25,7 +22,7 @@
         stroke: "white",
         "stroke-width": 1,
         "stroke-linejoin": "round",
-        cursor: "pointer"
+        cursor: "pointer",
     };
 
     var animationSpeed = 500;
@@ -120,15 +117,14 @@
         regions[regionName].attr(style);
         (function (region) {
             region.attr(style);
-            //region.attr('id', regionName);
 
-
-            region[0].addEventListener("mouseover", function() {
+            region[0].addEventListener("mouseenter", function() {
                 region.animate(hoverStyle, animationSpeed);
 
 
                 theRegions.push( region['id'] );
 
+                region['words'] = 'things';
                 console.log(region);
 
             }, true);
@@ -141,36 +137,35 @@
     }
 
 
+    var map = document.getElementById('map');
+    var mousedownID = -1;  //Global ID of mouse down interval
+    function mousedown(event) {
+        if(mousedownID==-1)  //Prevent multimple loops!
+            mousedownID = setInterval(whilemousedown, 100 /*execute every 100ms*/);
+            console.log('mouse has been clicked');
+
+    }
+    function mouseup(event) {
+        if(mousedownID!=-1) {  //Only stop if exists
+            clearInterval(mousedownID);
+            mousedownID=-1;
+        }
+    }
+    function whilemousedown() {
+        console.log('mouse id currently down');
+    }
+    //Assign events
+    map.addEventListener("mousedown", mousedown);
+    map.addEventListener("mouseup", mouseup);
+    //Also clear the interval when user leaves the window with mouse
+
+    map.addEventListener('click', function(){
+        console.log(theRegions);
+        theRegions = [];
+    })
+
+
 
 })();
 
 
-/**
-* Checks to see if there is localStorage available in the browser
-* */
-
-(function checkStorage(){
-    if (storageAvailable('localStorage')) {
-        // Yippee! We can use localStorage awesomeness
-        console.log('localStorage available for use');
-    }
-    else {
-        // Too bad, no localStorage for us
-        console.log('No');
-    }
-})();
-
-
-/**  helper function for local storage availability inquiry **/
-function storageAvailable(type) {
-    try {
-        var storage = window[type],
-            x = '__storage_test__';
-        storage.setItem(x, x);
-        storage.removeItem(x);
-        return true;
-    }
-    catch(e) {
-        return false;
-    }
-}
