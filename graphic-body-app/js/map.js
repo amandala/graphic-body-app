@@ -7,7 +7,15 @@ var allTheRegions = [];
 var fs = require('fs');
 var anterior = JSON.parse(fs.readFileSync('views/anterior.json', 'utf8'));
 
-function createMap(data, viewId){
+/**
+ * Function renderMap
+ *
+ * creates a map using Raphael with a given array of path data
+ *
+ * @param data - A JSON file that contains the path data for the view
+ * @param viewId - The id of the div to render the map in
+ */
+function renderMap(data, viewId){
 
     var mapContainer = document.getElementById(viewId);
     document.write(mapContainer);
@@ -33,6 +41,17 @@ function createMap(data, viewId){
 
    for(var i=0; i < data.length; i++){
        regions[i] = map.path(data[i]['path']);
+       regions[i]['view'] = data[i]['view'];
+       regions[i]['region'] = data[i]['region'];
+       regions[i]['dermatome'] = data[i]['dermatome'];
+       regions[i]['side'] = data[i]['side'];
+
+
+       regions[i]['sympt-pain'] = 0;
+       regions[i]['sympt-numbness'] = 0;
+       regions[i]['sympt-tingling'] = 0;
+       regions[i]['sympt-weakness'] = 0;
+
    }
 
     //add event listeners and atributes to the svg regions
@@ -68,14 +87,14 @@ function createMap(data, viewId){
 }
 
 
-createMap(anterior['regions'], 'anterior-map');
+renderMap(anterior['regions'], 'anterior-map');
 
 
 function addEventListeners (viewId){
     var map = document.getElementById(viewId);
     var mousedownID = -1;  //Global ID of mouse down interval
     function mousedown(event) {
-        if(mousedownID==-1)  //Prevent multimple loops!
+        if(mousedownID==-1)  //Prevent multiple loops!
             mousedownID = setInterval(whilemousedown, 100 /*execute every 100ms*/);
         console.log('mouse has been clicked');
 
