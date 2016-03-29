@@ -2,7 +2,9 @@
  * Created by Amanda on 2016-02-15.
  */
 
-var allTheRegions = [];
+var regions = {};
+var allTheRegions = {};
+var touchedRegions = [];
 
 var fs = require('fs');
 var anterior = JSON.parse(fs.readFileSync('views/anterior.json', 'utf8'));
@@ -16,6 +18,8 @@ var anterior = JSON.parse(fs.readFileSync('views/anterior.json', 'utf8'));
  * @param viewId - The id of the div to render the map in
  */
 function renderMap(data, viewId){
+    //set the whole regions array with the given SVG data
+    allTheRegions = data;
 
     var mapContainer = document.getElementById(viewId);
     document.write(mapContainer);
@@ -37,8 +41,6 @@ function renderMap(data, viewId){
         fill: "#27b7c0"
     }
 
-    var regions = {};
-
    for(var i=0; i < data.length; i++){
        regions[i] = map.path(data[i]['path']);
        regions[i]['view'] = data[i]['view'];
@@ -47,10 +49,10 @@ function renderMap(data, viewId){
        regions[i]['side'] = data[i]['side'];
 
 
-       regions[i]['sympt-pain'] = 0;
-       regions[i]['sympt-numbness'] = 0;
-       regions[i]['sympt-tingling'] = 0;
-       regions[i]['sympt-weakness'] = 0;
+       regions[i]['sympt-pain'] = data[i]['sympt-pain'];
+       regions[i]['sympt-numbness'] = data[i]['sympt-numbness'];
+       regions[i]['sympt-tingling'] = data[i]['sympt-tingling'];
+       regions[i]['sympt-weakness'] = data[i]['sympt-weakness'];
 
    }
 
@@ -63,20 +65,16 @@ function renderMap(data, viewId){
             region[0].addEventListener("mouseenter", function() {
                 region.animate(hoverStyle, animationSpeed);
 
-
-                allTheRegions.push( region['id'] );
-
-                region['sympt-pain'] = 0;
-                region['sympt-numbness'] = 0;
-                region['sympt-tingling'] = 0;
-                region['sympt-weakness'] = 0;
-
-                console.log(region);
+                if(touchedRegions.indexOf(region['dermatome']) === -1){
+                    touchedRegions.push(region['dermatome']);
+                }
 
             }, true);
 
             region[0].addEventListener("mouseout", function() {
                 region.animate(style, animationSpeed);
+
+
             }, true);
 
         })(regions[regionName]);
@@ -84,8 +82,8 @@ function renderMap(data, viewId){
 
     return addEventListeners(viewId);
 
-}
 
+}
 
 renderMap(anterior['regions'], 'anterior-map');
 
@@ -93,6 +91,7 @@ renderMap(anterior['regions'], 'anterior-map');
 function addEventListeners (viewId){
     var map = document.getElementById(viewId);
     var mousedownID = -1;  //Global ID of mouse down interval
+
     function mousedown(event) {
         if(mousedownID==-1)  //Prevent multiple loops!
             mousedownID = setInterval(whilemousedown, 100 /*execute every 100ms*/);
@@ -103,10 +102,17 @@ function addEventListeners (viewId){
         if(mousedownID!=-1) {  //Only stop if exists
             clearInterval(mousedownID);
             mousedownID=-1;
+
+
+            gatherData();
+
+
+
         }
     }
     function whilemousedown() {
         console.log('mouse is currently down');
+
     }
     //Assign events
     map.addEventListener("mousedown", mousedown);
@@ -116,5 +122,83 @@ function addEventListeners (viewId){
     map.addEventListener('click', function(){
         allTheRegions = [];
     })
+}
 
+
+function gatherData(){
+    console.log(touchedRegions);
+}
+
+/** Potential touch event handlers **/
+/** TODO testing required with device **/
+
+
+(function startup() {
+    var el = document.getElementById("anterior-map");
+    el.addEventListener("touchstart", handleStart, false);
+    el.addEventListener("touchend", handleEnd, false);
+    el.addEventListener("touchcancel", handleCancel, false);
+    log("initialized.");
+})();
+
+var ongoingTouches = new Array();
+
+function handleStart(evt) {
+
+     console.log('started touce events');
+    evt.preventDefault();
+    log("touchstart.");
+    var el = document.getElementById("anterior-map");
+    var ctx = el.getContext("2d");
+    var touches = evt.changedTouches;
+
+    for (var i = 0; i < touches.length; i++) {
+        log("touchstart:" + i + "...");
+        ongoingTouches.push(copyTouch(touches[i]));
+        var color = colorForTouch(touches[i]);
+        ctx.beginPath();
+        ctx.arc(touches[i].pageX, touches[i].pageY, 4, 0, 2 * Math.PI, false);  // a circle at the start
+        ctx.fillStyle = color;
+        ctx.fill();
+        log("touchstart:" + i + ".");
+    }
+}
+
+function handleEnd(evt) {
+    evt.preventDefault();
+    log("touchend");
+    var el = document.getElementsByTagName("canvas")[0];
+    var ctx = el.getContext("2d");
+    var touches = evt.changedTouches;
+
+    for (var i = 0; i < touches.length; i++) {
+        var color = colorForTouch(touches[i]);
+        var idx = ongoingTouchIndexById(touches[i].identifier);
+
+        if (idx >= 0) {
+            ctx.lineWidth = 4;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
+            ctx.lineTo(touches[i].pageX, touches[i].pageY);
+            ctx.fillRect(touches[i].pageX - 4, touches[i].pageY - 4, 8, 8);  // and a square at the end
+            ongoingTouches.splice(idx, 1);  // remove it; we're done
+        } else {
+            log("can't figure out which touch to end");
+        }
+    }
+}
+
+function handleCancel(evt) {
+    evt.preventDefault();
+    log("touchcancel.");
+    var touches = evt.changedTouches;
+
+    for (var i = 0; i < touches.length; i++) {
+        ongoingTouches.splice(i, 1);  // remove it; we're done
+    }
+}
+
+function log(msg) {
+    console.log(msg);
 }

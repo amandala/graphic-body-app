@@ -9,6 +9,8 @@ var fs = require('fs');
 var nconf = require('nconf').file({file: getUserHome() + '/graphic-body-config.json'});
 
 
+/*********** File save functions ***************/
+
 /** decide the users platform to determine the location of the home folder to store config settings **/
 function getUserHome() {
     return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
@@ -29,6 +31,7 @@ function saveToFile(fileName, data){
         console.log("The file was saved!");
     });
 }
+
 
 /**
  * Checks to see what storage is available for use
@@ -59,6 +62,12 @@ function storageAvailable(type) {
 }
 
 
+/**************** Gather data functions ******************************/
+
+
+
+
+/*************** Local storage functions ****************/
 
 /**
  * nconf stuff TODO document
