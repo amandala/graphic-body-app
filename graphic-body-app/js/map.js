@@ -101,13 +101,14 @@ function addEventListeners (viewId){
     function mouseup(event) {
         if(mousedownID!=-1) {  //Only stop if exists
             clearInterval(mousedownID);
-            mousedownID=-1;
+            mousedownID = -1;
 
 
+
+            gatherSymptomData();
             gatherData();
 
-
-
+            touchedRegions = [];
         }
     }
     function whilemousedown() {
@@ -126,7 +127,25 @@ function addEventListeners (viewId){
 
 
 function gatherData(){
-    console.log(touchedRegions);
+
+    var result = allTheRegions.filter(function( obj ) {
+
+       if(touchedRegions.includes(obj['dermatome'])){
+           console.log(obj['dermatome']);
+       }
+
+    });
+
+    alert(touchedRegions);
+
+   //console.log(touchedRegions);
+}
+function gatherSymptomData(){
+    var modal = document.getElementById('myModal');
+
+    modal.style.display = "block";
+
+
 }
 
 /** Potential touch event handlers **/
