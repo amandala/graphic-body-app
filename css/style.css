@@ -35,3 +35,11 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+
+
+/* slider */
+div#slider {
+    margin: 3rem;
+}
+

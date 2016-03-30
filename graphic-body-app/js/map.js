@@ -6,6 +6,9 @@ var regions = {};
 var allTheRegions = {};
 var touchedRegions = [];
 
+var theSymptom = '';
+var theSeverity = 0;
+
 var fs = require('fs');
 var anterior = JSON.parse(fs.readFileSync('views/anterior.json', 'utf8'));
 
@@ -103,12 +106,9 @@ function addEventListeners (viewId){
             clearInterval(mousedownID);
             mousedownID = -1;
 
+            result = gatherSeverityData();
 
 
-            gatherSymptomData();
-            gatherData();
-
-            touchedRegions = [];
         }
     }
     function whilemousedown() {
@@ -126,27 +126,72 @@ function addEventListeners (viewId){
 }
 
 
-function gatherData(){
+function saveData(){
+
+
+
+    // kill the modal symptom slider so that it can be initialixed again on the next swipe
+    slider.noUiSlider.destroy();
+
+
+
+    console.log(theSeverity);
+    console.log(theSymptom);
 
     var result = allTheRegions.filter(function( obj ) {
+            console.log(obj);
+        if(touchedRegions.includes(obj['dermatome'])){
+            console.log(obj['dermatome']);
 
-       if(touchedRegions.includes(obj['dermatome'])){
-           console.log(obj['dermatome']);
-       }
+        }
 
     });
 
-    alert(touchedRegions);
-
-   //console.log(touchedRegions);
 }
-function gatherSymptomData(){
+
+
+
+function gatherSeverityData() {
+
+    //Display the modal, and create the severity slider
     var modal = document.getElementById('myModal');
+    var dropdown = document.getElementById('symptomDropdown');
+
+
+    //get the symptom from the dropdown
+
+    //initialize it to the default of pain
+    theSymptom = dropdown.options[dropdown.selectedIndex].value;
+    //and update it if it changes
+    dropdown.addEventListener('change', function(){
+        theSymptom = dropdown.options[dropdown.selectedIndex].value;
+    });
 
     modal.style.display = "block";
+    slider = document.getElementById('slider');
+    noUiSlider.create(slider, {
+        start: [1],
+        step: 1,
+        range: {
+            'min': 1,
+            'max': 10
+        }
+    });
+
+
+    var valueInput = document.getElementById('value-input'),
+        valueSpan = document.getElementById('value-span');
+
+    slider.noUiSlider.on('update', function () {
+        theSeverity = slider.noUiSlider.get()
+
+    });
 
 
 }
+
+
+
 
 /** Potential touch event handlers **/
 /** TODO testing required with device **/

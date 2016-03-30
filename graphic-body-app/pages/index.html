@@ -6,6 +6,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../../css/photon.min.css">
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../js/noUiSlider/nouislider.css">
 
 
   </head>
@@ -48,13 +49,16 @@
 
           <!-- Modal content -->
           <div class="modal-content">
-            <span class="close">x</span>
-           <select>
-             <option>Pain</option>
-             <option>Numbness</option>
-             <option>Tingling</option>
-             <option>Weakness</option>
+            <span id="closeModal" class="close">Save</span>
+           <select id="symptomDropdown">
+             <option value="pain">Pain</option>
+             <option value="numbness">Numbness</option>
+             <option value="tingling">Tingling</option>
+             <option value="weakness">Weakness</option>
            </select>
+
+            <div id="slider"></div>
+            <span id="value-span"></span>
           </div>
 
         </div>
@@ -68,7 +72,28 @@
     <script src="../js/raphael-min.js"></script>
     <script src="../js/map.js" charset="utf-8"></script>
     <script src="../js/file-save.js"></script>
+    <script src="../js/noUiSlider/nouislider.js"></script>
     <script src="../js/jquery/src/jquery.js" onload="window.$ = window.jQuery = module.exports;"></script>
+
+
+
+
+
+    <!-- initialize slider -->
+    <script>
+
+      var modal = document.getElementById('myModal');
+
+      // When the user clicks on <span> (x), close the modal
+
+      var closeSpan = document.getElementById('closeModal');
+      closeSpan.onclick = function() {
+        modal.style.display = "none";
+
+        saveData();
+      }
+
+    </script>
 
   </body>
 </html>
