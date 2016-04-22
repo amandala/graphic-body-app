@@ -1,4 +1,5 @@
 /* The Modal (background) */
+
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -13,6 +14,7 @@
 }
 
 /* Modal Content/Box */
+
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
@@ -22,6 +24,7 @@
 }
 
 /* The Close Button */
+
 .close {
     color: #aaa;
     float: right;
@@ -39,7 +42,34 @@
 
 
 /* slider */
+
 div#slider {
     margin: 3rem;
 }
 
+/* sidebar */
+
+.pane-sm.sidebar {
+    padding-top: 2rem;
+}
+
+.btn .icon {
+    color: white;
+    padding-right: 16px;
+}
+
+.sidebar-section {
+    padding: 0.25rem;
+}
+
+.checkbox label, .radio label{
+    padding-left: 25px;
+}
+
+
+/* maps */
+
+div.map {
+    width: 400px;
+    display: inline;
+}

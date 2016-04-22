@@ -16,84 +16,94 @@
       <header class="toolbar toolbar-header">
         <h1 class="title">Graphic Body</h1>
         <div class="toolbar-actions">
-          <div class="btn-group">
-            <button class="btn btn-default active">
-              <span class="icon icon-vcard"></span>
-            </button>
-            <button class="btn btn-default">
-              <span class="icon icon-left-circled"></span>
-            </button>
-            <button class="btn btn-default">
-              <span class="icon icon-right-circled"></span>
-            </button>
-          </div>
-          <div class="btn-group">
-            <button class="btn btn-default">
-              <span class="icon icon-reply"></span>
-            </button>
-            <button class="btn btn-default">
-              <span class="icon icon-reply-all"></span>
-            </button>
-            <button class="btn btn-default">
-              <span class="icon icon-floppy"></span>
-            </button>
-          </div>
+
         </div>
       </header>
           <!-- Your app's content goes inside .window-content -->
       <div class="window-content">
-        <div id="anterior-map"></div>
 
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
-
-          <!-- Modal content -->
-          <div class="modal-content">
-            <span id="closeModal" class="close">Save</span>
-           <select id="symptomDropdown">
-             <option value="pain">Pain</option>
-             <option value="numbness">Numbness</option>
-             <option value="tingling">Tingling</option>
-             <option value="weakness">Weakness</option>
-           </select>
-
-            <div id="slider"></div>
-            <span id="value-span"></span>
+        <div class="pane-group">
+          <div class="pane-sm sidebar">
+            <div class="sidebar-section">
+              <form>
+                <div class="form-group">
+                  <input type="text" name="name" id="name" placeholder="name">
+                  <input type="number" name="age" id="age" placeholder="age" min="18" max="135">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="radios" checked>
+                      Male
+                    </label>
+                    <label>
+                      <input type="radio" name="radios" >
+                      Female
+                    </label>
+                    <label>
+                      <input type="radio" name="radios" >
+                      Other
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="sidebar-section">
+              <button class="btn btn-warning">
+                <span class="icon icon-reply"></span> Back
+              </button>
+              <button class="btn btn-negative">
+                <span class="icon icon-reply-all" onclick="resetMaps()"></span> Reset
+              </button>
+              <button class="btn btn-positive">
+                <span class="icon icon-floppy" onclick="saveData()"></span> Save
+              </button>
+            </div>
           </div>
+          <div class="pane">
+            <div class="map" id="anterior-map"></div>
+            <div  class="map" id="posterior-map"></div>
 
+
+            <!-- The Modal -->
+            <div id="symptomModal" class="modal">
+
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span id="closeModal" class="close">Save</span>
+                <select id="symptomDropdown">
+                  <option value="pain">Pain</option>
+                  <option value="numbness">Numbness</option>
+                  <option value="tingling">Tingling</option>
+                  <option value="weakness">Weakness</option>
+                </select>
+
+                <div id="slider"></div>
+                <span id="severity-span"></span>
+              </div>
+
+            </div>
+
+            <div id="userModal" class="modal">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span id="closeModal" class="close">Save</span>
+              </div>
+            </div>
+
+          </div>
         </div>
+
+
       </div>
     </div>
 
 
-    <!-- Javascript -->
+    <!-- Include Javascript Files -->
 
-    <!--<script src="js/menu.js" charset="utf-8"></script> -->
     <script src="../js/raphael-min.js"></script>
     <script src="../js/map.js" charset="utf-8"></script>
     <script src="../js/file-save.js"></script>
     <script src="../js/noUiSlider/nouislider.js"></script>
     <script src="../js/jquery/src/jquery.js" onload="window.$ = window.jQuery = module.exports;"></script>
-
-
-
-
-
-    <!-- initialize slider -->
-    <script>
-
-      var modal = document.getElementById('myModal');
-
-      // When the user clicks on <span> (x), close the modal
-
-      var closeSpan = document.getElementById('closeModal');
-      closeSpan.onclick = function() {
-        modal.style.display = "none";
-
-        saveData();
-      }
-
-    </script>
 
   </body>
 </html>
