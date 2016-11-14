@@ -21,14 +21,17 @@
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    text-align: center;
+}
+
+.form-control {
+    width: initial;
 }
 
 /* The Close Button */
 
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
     font-weight: bold;
 }
 

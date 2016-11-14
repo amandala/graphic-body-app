@@ -8,6 +8,9 @@ var regions = {};
 var allTheRegions = [];
 var touchedRegions = [];
 
+var userName = '';
+var userAge = '';
+
 var theSymptom = '';
 var theSeverity = 0;
 
@@ -41,15 +44,15 @@ var posterior = JSON.parse(fs.readFileSync('views/posterior.json', 'utf8'));
     }
 
     // Update user info
-    var name = document.getElementById('name');
-    var age = document.getElementById('age');
+    userName = document.getElementById('name');
+    userAge = document.getElementById('age');
 
-    name.addEventListener('change',function(event) {
-        console.log(name.value);
+    userName.addEventListener('change',function(event) {
+        console.log(userName.value);
     });
 
-    age.addEventListener('change',function(event) {
-        console.log(age.value);
+    userAge.addEventListener('change',function(event) {
+        console.log(userAge.value);
     })
 
 
@@ -104,10 +107,14 @@ function renderMap(data, viewId){
        regions[i]['sympt-tingling'] = data[i]['sympt-tingling'];
        regions[i]['sympt-weakness'] = data[i]['sympt-weakness'];
 
-       regions[i]['pathid'] = data[i]['path'];
+       var idString = data[i]['side'] + '-' + data[i]['dermatome']  + '-' + data[i]['view'];
+
+       regions[i]['pathid'] = idString;
 
 
    }
+
+
 
     //add event listeners and atributes to the svg regions
     for(var regionName in regions) {
@@ -132,6 +139,8 @@ function renderMap(data, viewId){
             }, true);
 
         })(regions[regionName]);
+
+
     }
 
     return addEventListeners(viewId);
@@ -227,15 +236,7 @@ function gatherSeverityData() {
 
 // called when the modal is closed to update the dermatomes in the selected regions
 function updateDermatomes(){
-
-    console.log(theSeverity);
-    console.log(theSymptom);
-
-    //TODO implement a unique identifier that has region, view, and dermatome combiined
-    //console.log('touched');
-    console.log(touchedRegions);
-    //console.log('All');
-    //console.log(allTheRegions);
+    console.log('reporting ' + theSymptom + ' level ' + theSeverity + ' on the following regions');
 
    touchedRegions.forEach( updateSvgRegions )
 
@@ -246,16 +247,20 @@ function updateDermatomes(){
            console.log(obj['id']);
         }
     });
+
+    console.log(touchedRegions);
+
 }
 
 
 function updateSvgRegions(item, index){
-   // console.log(item);
 
     var lookup = {};
     for (var i = 0, len = allTheRegions.length; i < len; i++) {
 
-        if(allTheRegions[i]['path'] === item){
+        var idString = allTheRegions[i]['side'] + '-' + allTheRegions[i]['dermatome'] + '-' + allTheRegions[i]['view'];
+
+        if(idString === item){
 
             var symptomString = 'sympt-' + theSymptom;
             allTheRegions[i][symptomString] = theSeverity;
@@ -265,10 +270,15 @@ function updateSvgRegions(item, index){
 
         lookup[allTheRegions[i].pathid] = allTheRegions[i];
     }
+
+
+    touchedRegions = [];
 }
 
 
 function resetMaps(){
+
+    console.log("Resetting maps");
 
     allTheRegions.forEach( function(item){
         item['sympt-pain'] = 0;
@@ -276,9 +286,6 @@ function resetMaps(){
         item['sympt-tingling'] = 0;
         item['sympt-weakness'] = 0;
     });
-
-    console.log("Resetting maps");
-    console.log(allTheRegions);
 }
 
 
@@ -323,14 +330,18 @@ function convertArrayOfObjectsToCSV(args) {
 }
 
 
-function saveData(){
+function saveData(defaultFileName){
 
-    console.log('saving to ');
+    var utc = new Date().toJSON().slice(0,10);
+
+    var filename = defaultFileName + userName.value + userAge.value + '-' + utc + '.csv';
+
+    console.log('saving to '+ filename);
 
     var args = { columnDelimiter: ',', data: allTheRegions };
     var result = convertArrayOfObjectsToCSV(args);
 
-    saveToFile('anterior-test.csv', result);
+    saveToFile(filename, result);
 }
 
 

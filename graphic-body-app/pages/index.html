@@ -54,7 +54,7 @@
                 <span class="icon icon-reply-all" onclick="resetMaps()"></span> Reset
               </button>
               <button class="btn btn-positive">
-                <span class="icon icon-floppy" onclick="saveData()"></span> Save
+                <span class="icon icon-floppy" onclick="saveData('beta-')"></span> Save
               </button>
             </div>
           </div>
@@ -68,8 +68,8 @@
 
               <!-- Modal content -->
               <div class="modal-content">
-                <span id="closeModal" class="close">Save</span>
-                <select id="symptomDropdown">
+
+                <select class="form-control" id="symptomDropdown">
                   <option value="pain">Pain</option>
                   <option value="numbness">Numbness</option>
                   <option value="tingling">Tingling</option>
@@ -78,6 +78,8 @@
 
                 <div id="slider"></div>
                 <span id="severity-span"></span>
+
+                <button id="closeModal" class="btn btn-positive">Save</button>
               </div>
 
             </div>
